@@ -1,0 +1,32 @@
+#include <DHT.h> // Подключаем библиотеку для работы с датчиком DHT11
+
+#define DHTPIN 2    // Пин, к которому подключен выход датчика DHT11
+#define DHTTYPE DHT11   // Указываем тип датчика (DHT11)
+
+DHT dht(DHTPIN, DHTTYPE); // Создаем объект dht для работы с датчиком
+
+void setup() {
+  Serial.begin(9600); // Инициализация сериальной связи для вывода данных в монитор порта
+  dht.begin(); // Инициализация датчика
+}
+
+void loop() {
+  delay(2000); // Пауза 2 секунды между измерениями
+  
+  float humidity = dht.readHumidity(); // Получаем значение влажности
+  float temperature = dht.readTemperature(); // Получаем значение температуры в Цельсиях
+  
+  // Проверяем, успешно ли получены данные от датчика
+  if (isnan(humidity) || isnan(temperature)) {
+    Serial.println("Ошибка чтения данных с датчика DHT!");
+    return;
+  }
+  
+  // Выводим полученные данные в монитор порта
+  Serial.print("Влажность: ");
+  Serial.print(humidity);
+  Serial.print("%\t");
+  Serial.print("Температура: ");
+  Serial.print(temperature);
+  Serial.println("°C");
+}
